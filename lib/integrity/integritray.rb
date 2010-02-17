@@ -1,3 +1,4 @@
+require 'integrity'
 
 module Integrity
   module Integritray
@@ -19,27 +20,36 @@ module Integrity
 
       def activity(status)
         case status
-        when :success, :failed then 'Sleeping'
-        when :pending then 'Building'
-        else 'Sleeping'
+          when :success, :failed then
+            'Sleeping'
+          when :pending then
+            'Building'
+          else
+            'Sleeping'
         end
       end
 
       def build_status(status)
         case status
-        when :success, :pending then 'Success'
-        when :failed then 'Failure'
-        else 'Unknown'
+          when :success, :pending then
+            'Success'
+          when :failed then
+            'Failure'
+          else
+            'Unknown'
         end
       end
 
     end
 
+    class App < Sinatra::Base
 
-    def self.registered(app)
-      app.helpers Integritray::Helpers
+      set     :raise_errors, true
+      enable  :methodoverride, :static, :sessions
 
-      app.get '/projects.xml' do
+      helpers Sinatra::UrlForHelper, Integrity::Helpers, Integritray::Helpers
+
+      get '/projects.xml' do
         login_required if params["private"]
         builder do |xml|
           @projects = authorized? ? Project.all : Project.all(:public => true)
