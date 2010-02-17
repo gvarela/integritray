@@ -1,15 +1,19 @@
 require 'integrity'
+require "integrity/helpers/urls"
+require "integrity/helpers/authorization"
+require "integrity/helpers/rendering"
 
 module Integrity
   module Integritray
     module Helpers
+      include Integrity::Helpers
 
       def xml_opts_for_project(project)
         opts = {}
         opts['name']     = project.name
         opts['category'] = project.branch
         opts['activity'] = activity(project.last_build.status) if project.last_build
-        opts['webUrl']   = project_url(project)
+        opts['webUrl']   = project_url(project).to_s.gsub(request.script_name, '')
         if project.last_build
           opts['lastBuildStatus'] = build_status(project.last_build.status)
           opts['lastBuildLabel']  = project.last_build.commit.short_identifier
@@ -40,6 +44,15 @@ module Integrity
         end
       end
 
+      def authorize(user, password)
+        return true unless protect?
+        Integrity.app.user == user && Integrity.app.pass == password
+      end
+
+      def protect?
+       Integrity.app.respond_to?(:user) && Integrity.app.respond_to?(:pass)
+      end
+
     end
 
     class App < Sinatra::Base
@@ -47,7 +60,14 @@ module Integrity
       set     :raise_errors, true
       enable  :methodoverride, :static, :sessions
 
-      helpers Sinatra::UrlForHelper, Integrity::Helpers, Integritray::Helpers
+      helpers Sinatra::UrlForHelper, Integritray::Helpers
+
+      before do
+        # The browser only sends http auth data for requests that are explicitly
+        # required to do so. This way we get the real values of +#logged_in?+ and
+        # +#current_user+
+        login_required if session[:user]
+      end
 
       get '/projects.xml' do
         login_required if params["private"]
