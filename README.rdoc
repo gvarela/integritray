@@ -5,16 +5,10 @@ for use with CCMenu and other tray items.
 
 == Usage
 Install the integritray gem: 
-  gem install integritray
+  gem install gvarela-integritray
 
 Require in your Integrity application's config.ru:
   require 'integrity/integritray'
-
-Add rack end point in your config.ru
-
-  map "/" do
-    run Integrity::Integritray::App
-  end
   
 Point CCMenu or your tray item of choice to the feed URL:
   http://my.integration.server/projects.xml
