@@ -26,7 +26,7 @@ module Integrity
         case status
           when :success, :failed then
             'Sleeping'
-          when :pending then
+          when :pending, :building then
             'Building'
           else
             'Sleeping'
