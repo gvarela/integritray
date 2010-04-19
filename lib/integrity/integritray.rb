@@ -60,7 +60,7 @@ module Integrity
       set     :raise_errors, true
       enable  :methodoverride, :static, :sessions
 
-      helpers Sinatra::UrlForHelper, Integritray::Helpers
+      helpers Integritray::Helpers
 
       before do
         # The browser only sends http auth data for requests that are explicitly
