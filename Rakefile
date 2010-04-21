@@ -10,7 +10,7 @@ begin
     gem.homepage = "http://github.com/jfrench/integritray"
     gem.authors = ["Josh French", "Justin Smestad", "Gabe Varela"]
 
-    gem.add_dependency 'sinatra', '>= 0.9.4'
+    gem.add_dependency 'sinatra', '>= 1.0.0'
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError

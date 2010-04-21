@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{integritray}
-  s.version = "0.4.0"
+  s.version = "0.4.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Josh French", "Justin Smestad", "Gabe Varela"]
-  s.date = %q{2010-02-25}
+  s.date = %q{2010-04-19}
   s.email = %q{josh@digitalpulp.com}
   s.extra_rdoc_files = [
     "LICENSE",
